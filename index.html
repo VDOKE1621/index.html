@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Face Attendance System</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/dist/face-api.js"></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">FA</div>
+        <div>
+          <h1>FaceAttend</h1>
+          <span>Attendance System</span>
+        </div>
+      </div>
+      <nav>
+        <button class="nav-btn active" data-section="dashboard">Dashboard</button>
+        <button class="nav-btn" data-section="register">Register Student</button>
+        <button class="nav-btn" data-section="attendance">Take Attendance</button>
+        <button class="nav-btn" data-section="students">Students</button>
+        <button class="nav-btn" data-section="records">Attendance Records</button>
+      </nav>
+      <div class="sidebar-note">
+        <small>Browser prototype</small>
+        <p>Data is stored locally on this device.</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">FACE ATTENDANCE</p>
+          <h2 id="pageTitle">Dashboard</h2>
+        </div>
+        <button class="primary-btn" id="quickAttendance">Start Attendance</button>
+      </header>
+
+      <section id="dashboard" class="section active">
+        <div class="stats-grid">
+          <article class="stat-card"><span>Total Students</span><strong id="totalStudents">0</strong></article>
+          <article class="stat-card"><span>Present Today</span><strong id="presentToday">0</strong></article>
+          <article class="stat-card"><span>Absent Today</span><strong id="absentToday">0</strong></article>
+          <article class="stat-card"><span>Attendance Rate</span><strong id="attendanceRate">0%</strong></article>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <div><h3>Today's Attendance</h3><p>Recent attendance activity</p></div>
+            <button class="ghost-btn" data-go="records">View All</button>
+          </div>
+          <div id="recentAttendance" class="table-wrap"></div>
+        </div>
+      </section>
+
+      <section id="register" class="section">
+        <div class="panel form-panel">
+          <div class="panel-head">
+            <div><h3>Register Student</h3><p>Capture a clear face image for the prototype.</p></div>
+          </div>
+          <div class="form-grid">
+            <label>Student Name<input id="studentName" type="text" placeholder="Enter full name"></label>
+            <label>Roll Number<input id="rollNumber" type="text" placeholder="Enter roll number"></label>
+            <label>Department<input id="department" type="text" placeholder="e.g. AIDS"></label>
+            <label>Year<input id="year" type="text" placeholder="e.g. SY"></label>
+          </div>
+          <div class="camera-card">
+            <video id="registerVideo" autoplay playsinline muted></video>
+            <canvas id="registerCanvas" hidden></canvas>
+            <div class="camera-actions">
+              <button class="secondary-btn" id="startRegisterCamera">Open Camera</button>
+              <button class="primary-btn" id="captureFace">Capture Face</button>
+            </div>
+            <p id="registerStatus" class="status">Camera is not active.</p>
+            <div class="model-status" id="modelStatus">Face AI models: loading...</div>
+          </div>
+          <div class="preview-row">
+            <img id="facePreview" alt="Face preview">
+            <div><strong>Captured image</strong><p>This first version stores the captured image locally. Recognition will be added in the next step.</p></div>
+          </div>
+          <button class="primary-btn wide" id="saveStudent">Save Student</button>
+        </div>
+      </section>
+
+      <section id="attendance" class="section">
+        <div class="panel">
+          <div class="panel-head">
+            <div><h3>Take Attendance</h3><p>Camera workspace for face recognition.</p></div>
+            <span class="badge" id="attendanceMode">Prototype Mode</span>
+          </div>
+          <div class="attendance-camera">
+            <video id="attendanceVideo" autoplay playsinline muted></video>
+            <div class="scan-line"></div>
+            <div class="camera-overlay">Position one registered face inside the frame</div>
+          </div>
+          <div class="camera-actions">
+            <button class="secondary-btn" id="startAttendanceCamera">Open Camera</button>
+            <button class="primary-btn" id="startRecognition">Start Face Recognition</button>
+            <button class="secondary-btn" id="stopRecognition">Stop Recognition</button>
+          </div>
+          <p class="status" id="attendanceStatus">Load the models, open the camera, then start recognition.</p>
+          <div class="recognition-result" id="recognitionResult">Waiting for a face...</div>
+          <div id="attendanceStudentPicker" class="picker"></div>
+          <p class="status">For privacy, face descriptors are generated in this browser and stored locally with the student record.</p>
+        </div>
+      </section>
+
+      <section id="students" class="section">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Registered Students</h3><p>Students saved on this browser.</p></div></div>
+          <div id="studentsList" class="student-grid"></div>
+        </div>
+      </section>
+
+      <section id="records" class="section">
+        <div class="panel">
+          <div class="panel-head">
+            <div><h3>Attendance Records</h3><p>Stored locally in this browser.</p></div>
+            <button class="danger-btn" id="clearRecords">Clear Records</button>
+          </div>
+          <div id="recordsTable" class="table-wrap"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
